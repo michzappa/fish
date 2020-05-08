@@ -9,7 +9,7 @@ function deleteCards(room, team, playerName, cards) {
       if (cardIndex > -1) {
         playerHand.splice(cardIndex, 1);
       } else {
-        //throw new Error("Given card not in given player's hand")
+        //does nothing to the player's hand as this card was not in it
       }
       return fetch(
         "https://fish-backend.herokuapp.com/rooms/" +
@@ -160,10 +160,13 @@ function makeClaim(room, team, claims) {
   console.log(cardsInClaim);
 
   // if all the cards could be a valid claim, then we check if each player has what they
-  // are said to have. ALSO CJECK IF CARDS IN CLAIM IS 6 LONG
-  if (allInSameHalfSuit(cardsInClaim)) {
+  // are said to have and if the claim consists of six cards
+  if (allInSameHalfSuit(cardsInClaim) && (cardsInClaim.length === 6)) {
     // calling the helper, and duplicating the claims array for the accumulator
     makeClaimHelp(room, team, claims, claims.slice());
+  }
+  else{
+    alert("That was not a valid claim")
   }
 }
 
@@ -249,6 +252,9 @@ function makeClaimHelp(room, team, claims, claimsLeft) {
             body: JSON.stringify({ move: moveString }),
           });
         }
+      }
+      else{
+        alert("The claim was not correct")
       }
     });
   }
