@@ -9,7 +9,6 @@ import PlayerPanel from "./components/PlayerPanel/PlayerPanel";
 import ShowLastMove from "./components/ShowLastMove/ShowLastMove";
 import ShowTurnName from "./components/ShowTurnName/ShowTurnName";
 
-import { Button } from "react-bootstrap";
 import { askForCard, makeClaim, inSameHalfSuit } from "./gameMethods";
 
 // the main App of this Fish game, keeps the state, which is passed to children components
