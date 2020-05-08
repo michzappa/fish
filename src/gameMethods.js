@@ -205,20 +205,31 @@ function makeClaimHelp(room, team, claims, claimsLeft) {
           let completeClaimString = completeClaim.flat().toString();
 
           // putting the claim into the team's claim field
-          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/teams/" + team)
+          fetch(
+            "https://fish-backend.herokuapp.com/rooms/" +
+              room +
+              "/teams/" +
+              team
+          )
             .then((response) => response.json())
             .then((jsonResponse) => {
               let existingClaims = jsonResponse.claims;
               existingClaims.push(completeClaimString);
 
-              fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/teams/" + team, {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                method: "PUT",
-                body: JSON.stringify({ claims: existingClaims }),
-              });
+              fetch(
+                "https://fish-backend.herokuapp.com/rooms/" +
+                  room +
+                  "/teams/" +
+                  team,
+                {
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  method: "PUT",
+                  body: JSON.stringify({ claims: existingClaims }),
+                }
+              );
             });
 
           claims.forEach((claim) => {

@@ -77,57 +77,61 @@ class App extends React.Component {
   // updates the state of the hand, which is given to the ShowHand component
   updateHand() {
     this.getRoom();
-    if (!this.state.room[this.state.teamName]) {
-    } else {
-      if (
-        !this.state.room[this.state.teamName].players[this.state.playerName]
-      ) {
-      } else {
-        let hand = this.state.room[this.state.teamName].players[
-          this.state.playerName
-        ].hand;
-        let sortedBySuit = hand.sort((first, second) => {
-          return first.slice(-1).localeCompare(second.slice(-1));
-        });
-        // sorting by card number, preserving order of suits
-        let sortedByNumber = sortedBySuit.sort((first, second) => {
-          if (first.slice(-1).localeCompare(second.slice(-1)) === 0) {
-            return first.slice(0, 2).localeCompare(second.slice(0, 2));
-          }
-          return first.slice(-1).localeCompare(second.slice(-1));
-        });
-        let handString = sortedByNumber.join(", ");
-        this.setState({ hand: handString });
-      }
+    try {
+      let hand = this.state.room[this.state.teamName].players[
+        this.state.playerName
+      ].hand;
+      let sortedBySuit = hand.sort((first, second) => {
+        return first.slice(-1).localeCompare(second.slice(-1));
+      });
+      // sorting by card number, preserving order of suits
+      let sortedByNumber = sortedBySuit.sort((first, second) => {
+        if (first.slice(-1).localeCompare(second.slice(-1)) === 0) {
+          return first.slice(0, 2).localeCompare(second.slice(0, 2));
+        }
+        return first.slice(-1).localeCompare(second.slice(-1));
+      });
+      let handString = sortedByNumber.join(", ");
+      this.setState({ hand: handString });
+    } catch (err) {
+      console.log(err);
     }
   }
 
   // sets a state field to an array of this player's teammates
   getTeammates() {
-    let team = this.state.room[this.state.teamName];
-    if (team) {
-      let players = Object.keys(team.players);
-      let score = team.claims.length;
-      this.setState({ teammates: players, teamScore: score });
+    try {
+      let team = this.state.room[this.state.teamName];
+      if (team) {
+        let players = Object.keys(team.players);
+        let score = team.claims.length;
+        this.setState({ teammates: players, teamScore: score });
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
   // sets a state field to an array of this player's opponents
   getOpponents() {
-    let opponentTeam;
-    if (this.state.teamName === "team1") {
-      opponentTeam = this.state.room["team2"];
-    } else {
-      opponentTeam = this.state.room["team1"];
-    }
-    if (opponentTeam) {
-      let players = Object.keys(opponentTeam.players);
-      let score = opponentTeam.claims.length;
-      this.setState({ opponents: players, opponentsScore: score });
-      this.setState({
-        opponents: players,
-        opponentsScore: opponentTeam.claims.length,
-      });
+    try {
+      let opponentTeam;
+      if (this.state.teamName === "team1") {
+        opponentTeam = this.state.room["team2"];
+      } else {
+        opponentTeam = this.state.room["team1"];
+      }
+      if (opponentTeam) {
+        let players = Object.keys(opponentTeam.players);
+        let score = opponentTeam.claims.length;
+        this.setState({ opponents: players, opponentsScore: score });
+        this.setState({
+          opponents: players,
+          opponentsScore: opponentTeam.claims.length,
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
