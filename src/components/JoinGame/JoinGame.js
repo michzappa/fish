@@ -6,6 +6,7 @@ class JoinGame extends React.Component {
     super(props);
 
     this.addRoomClick = this.addRoomClick.bind(this);
+    this.deleteRoomClick = this.deleteRoomClick.bind(this);
     this.joinRoomClick = this.joinRoomClick.bind(this);
 
     this.state = {
@@ -28,7 +29,10 @@ class JoinGame extends React.Component {
               onChange={this.updateRoomToBeMadeState.bind(this)}
             />
             <Button variant="primary" size="lg" onClick={this.addRoomClick}>
-              Submit
+              Add Room
+            </Button>
+            <Button variant="primary" size="lg" onClick={this.deleteRoomClick}>
+              Delete Room
             </Button>
           </form>
         </div>
@@ -78,6 +82,24 @@ class JoinGame extends React.Component {
         "Content-Type": "application/json",
       },
       method: "POST",
+      body: JSON.stringify({ name: this.state.roomToBeMade }),
+    });
+
+    this.setState({
+      roomToBeMade: "",
+      roomToBeJoined: "",
+      joiningPlayerName: "",
+    });
+  }
+
+  // deletes the room represented by the state of this component
+  deleteRoomClick() {
+    fetch("https://fish-backend.herokuapp.com/rooms/", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
       body: JSON.stringify({ name: this.state.roomToBeMade }),
     });
 

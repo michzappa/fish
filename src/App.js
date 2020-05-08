@@ -20,7 +20,10 @@ class App extends React.Component {
       team: "",
       player: "",
       teammates: [],
+      teamScore: 0,
       opponents: [],
+      opponentsScore: 0,
+      opponentName: "",
       move: "",
       turn: "",
       roomName: "",
@@ -63,6 +66,30 @@ class App extends React.Component {
     this.getOpponents();
     this.getLastMove();
     this.getTurnName();
+
+    if (this.state.teamScore > 4) {
+      fetch("https://fish-backend.herokuapp.com/rooms/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+        body: JSON.stringify({ name: this.state.room }),
+      }).then((res) => {
+        alert(this.state.teamName + " has won the game!");
+      });
+    } else if (this.state.opponentsScore > 4) {
+      fetch("https://fish-backend.herokuapp.com/rooms/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+        body: JSON.stringify({ name: this.state.room }),
+      }).then((res) => {
+        alert(this.state.opponentName + " has won the game!");
+      });
+    }
   }
 
   // sets the room and player of the player of this web app
@@ -118,8 +145,10 @@ class App extends React.Component {
       let opponentTeam;
       if (this.state.teamName === "team1") {
         opponentTeam = this.state.room["team2"];
+        this.setState({ opponentName: "team2" });
       } else {
         opponentTeam = this.state.room["team1"];
+        this.setState({ opponentName: "team1" });
       }
       if (opponentTeam) {
         let players = Object.keys(opponentTeam.players);
