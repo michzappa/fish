@@ -72,7 +72,7 @@ class JoinGame extends React.Component {
 
   // posts the room represented by the state of this component
   addRoomClick() {
-    fetch("http://localhost:9000/rooms/", {
+    fetch("https://fish-backend.herokuapp.com/rooms/", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -92,7 +92,7 @@ class JoinGame extends React.Component {
   joinRoomClick() {
     let roomName = this.state.roomToBeJoined;
     let playerName = this.state.joiningPlayerName;
-    fetch("http://localhost:9000/rooms/" + roomName, {
+    fetch("https://fish-backend.herokuapp.com/rooms/" + roomName, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

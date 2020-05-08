@@ -58,7 +58,7 @@ class AskForCard extends React.Component {
 
   // uses the state to ask the player for the desired card
   askForCard() {
-    fetch("http://localhost:9000/rooms/" + this.props.room + "/turn/")
+    fetch("https://fish-backend.herokuapp.com/rooms/" + this.props.room + "/turn/")
       .then((res) => res.text())
       .then((res) => {
         console.log(res + "   " + this.props.player);

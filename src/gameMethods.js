@@ -12,7 +12,7 @@ function deleteCards(room, team, playerName, cards) {
         //throw new Error("Given card not in given player's hand")
       }
       return fetch(
-        "http://localhost:9000/rooms/" +
+        "https://fish-backend.herokuapp.com/rooms/" +
           room +
           "/teams/" +
           team +
@@ -36,7 +36,7 @@ function addCard(room, team, playerName, card) {
   return getPlayerHand(room, team, playerName, (playerHand) => {
     playerHand.push(card);
     return fetch(
-      "http://localhost:9000/rooms/" +
+      "https://fish-backend.herokuapp.com/rooms/" +
         room +
         "/teams/" +
         team +
@@ -83,7 +83,7 @@ function askForCard(room, teamAsking, playerAsking, playerAsked, card) {
           addCard(room, teamAsking, playerAsking, card);
 
           let moveString = `${playerAsking} asked for the ${card} from ${playerAsked}, and received it.`;
-          fetch("http://localhost:9000/rooms/" + room + "/move/", {
+          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/move/", {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -93,7 +93,7 @@ function askForCard(room, teamAsking, playerAsking, playerAsked, card) {
           });
 
           // setting the next turn to be for playerAsking
-          fetch("http://localhost:9000/rooms/" + room + "/turn/", {
+          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/turn/", {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -103,7 +103,7 @@ function askForCard(room, teamAsking, playerAsking, playerAsked, card) {
           });
         } else {
           let moveString = `${playerAsking} asked for the ${card} from ${playerAsked}, but ${playerAsked} did not have it.`;
-          fetch("http://localhost:9000/rooms/" + room + "/move/", {
+          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/move/", {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -113,7 +113,7 @@ function askForCard(room, teamAsking, playerAsking, playerAsked, card) {
           });
 
           // setting the next turn to be for the player asked, as they didn't have the requested card
-          fetch("http://localhost:9000/rooms/" + room + "/turn/", {
+          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/turn/", {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -130,7 +130,7 @@ function askForCard(room, teamAsking, playerAsking, playerAsked, card) {
 // gets the hand of the specified player and performs the given callback function on it
 function getPlayerHand(room, team, playerName, callBack) {
   return fetch(
-    "http://localhost:9000/rooms/" +
+    "https://fish-backend.herokuapp.com/rooms/" +
       room +
       "/teams/" +
       team +
@@ -205,13 +205,13 @@ function makeClaimHelp(room, team, claims, claimsLeft) {
           let completeClaimString = completeClaim.flat().toString();
 
           // putting the claim into the team's claim field
-          fetch("http://localhost:9000/rooms/" + room + "/teams/" + team)
+          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/teams/" + team)
             .then((response) => response.json())
             .then((jsonResponse) => {
               let existingClaims = jsonResponse.claims;
               existingClaims.push(completeClaimString);
 
-              fetch("http://localhost:9000/rooms/" + room + "/teams/" + team, {
+              fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/teams/" + team, {
                 headers: {
                   Accept: "application/json",
                   "Content-Type": "application/json",
@@ -229,7 +229,7 @@ function makeClaimHelp(room, team, claims, claimsLeft) {
 
           // setting the last move to be this claim being made
           let moveString = `${team} made the claim ${completeClaimString}.`;
-          fetch("http://localhost:9000/rooms/" + room + "/move/", {
+          fetch("https://fish-backend.herokuapp.com/rooms/" + room + "/move/", {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -331,7 +331,7 @@ function allInSameHalfSuit(cards) {
 // updates the state of the hand, which is given to the ShowHand component
 function updateHand() {
   fetch(
-    "http://localhost:9000/rooms/" +
+    "https://fish-backend.herokuapp.com/rooms/" +
       this.state.roomName +
       "/teams/" +
       this.state.teamName +
@@ -359,7 +359,7 @@ function updateHand() {
 // sets a state field to an array of this player's teammates
 function getTeammates() {
   fetch(
-    "http://localhost:9000/rooms/" +
+    "https://fish-backend.herokuapp.com/rooms/" +
       this.state.roomName +
       "/teams/" +
       this.state.teamName
@@ -381,7 +381,7 @@ function getOpponents() {
     opponentTeam = "team1";
   }
   fetch(
-    "http://localhost:9000/rooms/" +
+    "https://fish-backend.herokuapp.com/rooms/" +
       this.state.roomName +
       "/teams/" +
       opponentTeam

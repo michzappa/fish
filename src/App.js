@@ -41,7 +41,7 @@ class App extends React.Component {
   // sets a state field to be the overall JSON object for the room
   // this webapp is playing in from the server
   getRoom() {
-    fetch("http://localhost:9000/rooms/" + this.state.roomName)
+    fetch("https://fish-backend.herokuapp.com/rooms/" + this.state.roomName)
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
