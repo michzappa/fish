@@ -44,6 +44,19 @@ router.post("/", (req, res, next) => {
   }
 });
 
+// deletes the room of the given name to the rooms in the server
+// sends whether it has been successfully deleted
+router.delete("/", (req, res, next) => {
+  let name = req.body.name;
+  if (!rooms[name]) {
+    res.status(200).send("room " + name + " does not exist");
+  } else {
+    delete rooms[name]
+    res.status(400).send("room " + name + " has been deleted");
+  }
+});
+
+
 // adds a player to the given room in a random team
 router.post("/:name", (req, res, next) => {
   let playerName = req.body.name;
