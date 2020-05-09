@@ -161,12 +161,11 @@ function makeClaim(room, team, claims) {
 
   // if all the cards could be a valid claim, then we check if each player has what they
   // are said to have and if the claim consists of six cards
-  if (allInSameHalfSuit(cardsInClaim) && (cardsInClaim.length === 6)) {
+  if (allInSameHalfSuit(cardsInClaim) && cardsInClaim.length === 6) {
     // calling the helper, and duplicating the claims array for the accumulator
     makeClaimHelp(room, team, claims, claims.slice());
-  }
-  else{
-    alert("That was not a valid claim")
+  } else {
+    alert("That was not a valid claim");
   }
 }
 
@@ -252,9 +251,8 @@ function makeClaimHelp(room, team, claims, claimsLeft) {
             body: JSON.stringify({ move: moveString }),
           });
         }
-      }
-      else{
-        alert("The claim was not correct")
+      } else {
+        alert("The claim was not correct");
       }
     });
   }

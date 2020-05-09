@@ -8,6 +8,7 @@ import MakeClaim from "./components/MakeClaim/MakeClaim";
 import PlayerPanel from "./components/PlayerPanel/PlayerPanel";
 import ShowLastMove from "./components/ShowLastMove/ShowLastMove";
 import ShowTurnName from "./components/ShowTurnName/ShowTurnName";
+import RoomList from "./components/RoomList/RoomList";
 
 import { askForCard, makeClaim, inSameHalfSuit } from "./gameMethods";
 
@@ -40,6 +41,23 @@ class App extends React.Component {
     this.getTurnName = this.getTurnName.bind(this);
   }
 
+  // sets a state field to be a list of all the different rooms in the server
+  getRooms() {
+    fetch("https://fish-backend.herokuapp.com/rooms/")
+      .then((res) => res.json())
+      .then((res) => {
+        let allRooms = Object.keys(res);
+        this.setState({ rooms: allRooms });
+      });
+  }
+
+  // displays the list of rooms in the server if the app has not joined a room yet
+  displayRoomList() {
+    if (!this.state.room[this.state.teamName]) {
+      return <RoomList rooms={this.state.rooms} />;
+    }
+  }
+
   // sets a state field to be the overall JSON object for the room
   // this webapp is playing in from the server
   getRoom() {
@@ -54,13 +72,14 @@ class App extends React.Component {
   // sets getDatabase upon startup
   componentWillMount() {
     this.getRoom();
-
+    this.getRooms();
     setInterval(this.refreshState, 500); // runs every 5 seconds.
   }
 
   // refreshes the state of this web app from the data in the server
   refreshState() {
     this.getRoom();
+    this.getRooms();
     this.updateHand();
     this.getTeammates();
     this.getOpponents();
@@ -184,14 +203,15 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div>
-            <Logo />
+          <Logo />
+          <div className="game-information">
+            {this.displayRoomList()}
+            <JoinGame
+              rooms={this.state.rooms}
+              setPlayerForApp={this.setPlayer}
+              updateHand={this.updateHand}
+            />
           </div>
-          <JoinGame
-            rooms={this.state.rooms}
-            setPlayerForApp={this.setPlayer}
-            updateHand={this.updateHand}
-          />
         </header>
 
         <div className="game-information">
