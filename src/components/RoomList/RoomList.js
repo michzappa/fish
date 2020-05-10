@@ -27,7 +27,6 @@ class RoomList extends React.Component {
     } catch (err) {
       console.log(err);
     }
-    //return <li>5</li>
   }
 }
 
