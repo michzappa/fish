@@ -17,6 +17,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      rooms: "",
       room: "",
       team: "",
       player: "",
@@ -54,7 +55,16 @@ class App extends React.Component {
   // displays the list of rooms in the server if the app has not joined a room yet
   displayRoomList() {
     if (!this.state.room[this.state.teamName]) {
-      return <RoomList rooms={this.state.rooms} />;
+      return (
+        <div className="game-information">
+          <RoomList rooms={this.state.rooms} />
+          <JoinGame
+            rooms={this.state.rooms}
+            setPlayerForApp={this.setPlayer}
+            updateHand={this.updateHand}
+          />
+        </div>
+      );
     }
   }
 
@@ -204,14 +214,7 @@ class App extends React.Component {
       <div className="App">
         <header className="App-header">
           <Logo />
-          <div className="game-information">
-            {this.displayRoomList()}
-            <JoinGame
-              rooms={this.state.rooms}
-              setPlayerForApp={this.setPlayer}
-              updateHand={this.updateHand}
-            />
-          </div>
+          {this.displayRoomList()}
         </header>
 
         <div className="game-information">

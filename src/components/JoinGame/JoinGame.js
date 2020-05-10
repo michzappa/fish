@@ -110,30 +110,43 @@ class JoinGame extends React.Component {
     });
   }
 
-  // posts the player to the room represented by the state of this component
+  // posts the player to the room represented by the state of this component, if it
+  // is not already full
   joinRoomClick() {
     let roomName = this.state.roomToBeJoined;
     let playerName = this.state.joiningPlayerName;
-    fetch("https://fish-backend.herokuapp.com/rooms/" + roomName, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ name: playerName }),
-    })
-      .then((res) => res.text())
-      .then((team) => {
-        if (team === "Given room does not exist") {
-          alert("Please enter a room which has been created");
+
+    fetch("https://fish-backend.herokuapp.com/rooms/" + roomName)
+      .then((res) => res.json())
+      .then((res) => {
+        let team1Size = Object.keys(res.team1.players).length;
+        let team2Size = Object.keys(res.team2.players).length;
+
+        if (team1Size < 3 || team2Size < 3) {
+          fetch("https://fish-backend.herokuapp.com/rooms/" + roomName, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({ name: playerName }),
+          })
+            .then((res) => res.text())
+            .then((team) => {
+              if (team === "Given room does not exist") {
+                alert("Please enter a room which has been created");
+              } else {
+                this.props.setPlayerForApp(roomName, team, playerName);
+                this.props.updateHand();
+                this.setState({
+                  roomToBeMade: "",
+                  roomToBeJoined: "",
+                  joiningPlayerName: "",
+                });
+              }
+            });
         } else {
-          this.props.setPlayerForApp(roomName, team, playerName);
-          this.props.updateHand();
-          this.setState({
-            roomToBeMade: "",
-            roomToBeJoined: "",
-            joiningPlayerName: "",
-          });
+          alert("This room is full");
         }
       });
   }
