@@ -76,20 +76,23 @@ class JoinGame extends React.Component {
 
   // posts the room represented by the state of this component
   addRoomClick() {
-    fetch("https://fish-backend.herokuapp.com/rooms/", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ name: this.state.roomToBeMade }),
-    });
 
-    this.setState({
-      roomToBeMade: "",
-      roomToBeJoined: "",
-      joiningPlayerName: "",
-    });
+    if (this.state.roomToBeMade !== "" && this.state.roomToBeMade !== null) {
+      fetch("https://fish-backend.herokuapp.com/rooms/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ name: this.state.roomToBeMade }),
+      });
+
+      this.setState({
+        roomToBeMade: "",
+        roomToBeJoined: "",
+        joiningPlayerName: "",
+      });
+    }
   }
 
   // deletes the room represented by the state of this component
@@ -116,39 +119,41 @@ class JoinGame extends React.Component {
     let roomName = this.state.roomToBeJoined;
     let playerName = this.state.joiningPlayerName;
 
-    fetch("https://fish-backend.herokuapp.com/rooms/" + roomName)
-      .then((res) => res.json())
-      .then((res) => {
-        let team1Size = Object.keys(res.team1.players).length;
-        let team2Size = Object.keys(res.team2.players).length;
+    if (roomName && playerName) {
+      fetch("https://fish-backend.herokuapp.com/rooms/" + roomName)
+        .then((res) => res.json())
+        .then((res) => {
+          let team1Size = Object.keys(res.team1.players).length;
+          let team2Size = Object.keys(res.team2.players).length;
 
-        if (team1Size < 3 || team2Size < 3) {
-          fetch("https://fish-backend.herokuapp.com/rooms/" + roomName, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({ name: playerName }),
-          })
-            .then((res) => res.text())
-            .then((team) => {
-              if (team === "Given room does not exist") {
-                alert("Please enter a room which has been created");
-              } else {
-                this.props.setPlayerForApp(roomName, team, playerName);
-                this.props.updateHand();
-                this.setState({
-                  roomToBeMade: "",
-                  roomToBeJoined: "",
-                  joiningPlayerName: "",
-                });
-              }
-            });
-        } else {
-          alert("This room is full");
-        }
-      });
+          if (team1Size < 3 || team2Size < 3) {
+            fetch("https://fish-backend.herokuapp.com/rooms/" + roomName, {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify({ name: playerName }),
+            })
+              .then((res) => res.text())
+              .then((team) => {
+                if (team === "Given room does not exist") {
+                  alert("Please enter a room which has been created");
+                } else {
+                  this.props.setPlayerForApp(roomName, team, playerName);
+                  this.props.updateHand();
+                  this.setState({
+                    roomToBeMade: "",
+                    roomToBeJoined: "",
+                    joiningPlayerName: "",
+                  });
+                }
+              });
+          } else {
+            alert("This room is full");
+          }
+        });
+    }
   }
 }
 
