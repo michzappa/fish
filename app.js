@@ -19,6 +19,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/rooms", roomsRouter);
 
 // displays the react page
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join(__dirname, "./frontend/build")));
 
 module.exports = app;
